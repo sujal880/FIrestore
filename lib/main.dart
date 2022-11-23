@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firestore/homescreen.dart';
+import 'package:firestore/streambuilder.dart';
 import 'package:flutter/material.dart';
 
 main()async{
@@ -56,7 +57,7 @@ class MyApp extends StatelessWidget {
         // is not restarted.
         primarySwatch: Colors.blue,
       ),
-      home: HomeScreen()
+      home: stream()
     );
   }
 }

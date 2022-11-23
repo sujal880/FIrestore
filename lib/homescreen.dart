@@ -17,8 +17,8 @@ class _HomeScreenState extends State<HomeScreen> {
     String name = nameController.text.trim();
     String email = emailController.text.trim();
 
-    nameController.clear();
-    emailController.clear();
+    // nameController.clear();
+    // emailController.clear();
     if (name != "" && email != "") {
       Map<String, dynamic> UserData = {"name": name, "email": email};
       FirebaseFirestore.instance.collection("users").add(UserData);
@@ -64,22 +64,38 @@ class _HomeScreenState extends State<HomeScreen> {
                   SaveData();
                 }),
             SizedBox(height: 20),
-            StreamBuilder(
-              stream: FirebaseFirestore.instance.collection("users").snapshots(),
-              builder: (context,snapshot) {
+            StreamBuilder<QuerySnapshot>(
+              stream:
+                  FirebaseFirestore.instance.collection("users").snapshots(),
+              builder: (context, snapshot) {
+                print(snapshot);
                 if (snapshot.connectionState == ConnectionState.active) {
+                  print(snapshot.connectionState);
                   if (snapshot.hasData && snapshot.data != null) {
-                    ListView.builder(
-                      itemCount: snapshot.data!.docs.length,
-                      itemBuilder: (context, index) {
-                        Map<String, dynamic> userMap =
-                            snapshot.data!.docs[index].data()
-                                as Map<String, dynamic>;
-                        return ListTile(
-                          title: Text(userMap['name'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                           subtitle: Text(userMap['email'],style: TextStyle(fontSize: 14,fontWeight: FontWeight.bold),),
-                        );
-                      },
+                    print(snapshot.hasData);
+                    Expanded(
+                      child: ListView.builder(
+                        itemCount: snapshot.data!.docs.length,
+                        itemBuilder: (context, index) {
+                          Map<String, dynamic> userMap =
+                              snapshot.data!.docs[index].data()
+                                  as Map<String, dynamic>;
+                          print('user: ${userMap["name"]}');
+                          print('user: ${userMap["email"]}');
+                          // return ListTile(
+                          //   title: Text(
+                          //     userMap['name'],
+                          //     style: TextStyle(
+                          //         fontSize: 14, fontWeight: FontWeight.bold),
+                          //   ),
+                          //   subtitle: Text(
+                          //     userMap['email'],
+                          //     style: TextStyle(
+                          //         fontSize: 14, fontWeight: FontWeight.bold),
+                          //   ),
+                          // );
+                        },
+                      ),
                     );
                   } else {
                     return Text('No Data');
